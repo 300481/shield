@@ -6,3 +6,7 @@ rancheros-firewall:
   network_mode: "host"
   environment:
   - PUBLIC=FALSE
+  labels:
+    io.rancher.os.scope: "system"
+  volumes_from:
+    - all-volumes
