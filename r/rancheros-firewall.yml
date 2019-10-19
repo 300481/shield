@@ -1,0 +1,8 @@
+rancheros-firewall:
+  image: "300481/rancheros-firewall:latest"
+  restart: always
+  cap_add:
+    - NET_ADMIN
+  network_mode: "host"
+  environment:
+  - PUBLIC=FALSE
