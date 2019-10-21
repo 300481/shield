@@ -1,5 +1,5 @@
 rancheros-firewall:
-  image: 300481/rancheros-firewall:latest
+  image: 300481/rancheros-firewall:0.1.0
   command: "/bin/configure-firewall.sh"
   privileged: "true"
   labels:
