@@ -4,8 +4,6 @@
 # https://www.lammertbies.nl/comm/info/iptables.html
 # https://medium.com/@ebuschini/iptables-and-docker-95e2496f0b45
 
-PUBLIC=${PUBLIC:-FALSE}
-
 trap cleanup 1 2 3 9 15
 cleanup() {
     echo -n "Remove chains..."
@@ -18,6 +16,22 @@ cleanup() {
     done
     echo "OK"
     exit 0
+}
+
+public() {
+    # get IP address of default route interface
+    IP=$(ip route get 8.8.8.8 | head -1 | awk '{print $7}')
+
+    # return 1 if IP address is in private range
+    if echo ${IP} | grep -Eq '^10\.' ;                            then return 1 ; fi
+    if echo ${IP} | grep -Eq '^127\.' ;                           then return 1 ; fi
+    if echo ${IP} | grep -Eq '^169\.254' ;                        then return 1 ; fi
+    if echo ${IP} | grep -Eq '^172\.(16|17|18|19|2[0-9]|3[01])' ; then return 1 ; fi
+    if echo ${IP} | grep -Eq '^192\.168' ;                        then return 1 ; fi
+    if echo ${IP} | grep -Eq '^192\.0\.2\.' ;                     then return 1 ; fi
+
+    # return 0 (true) if not in private range --> public IP
+    return 0
 }
 
 create_chains() {
@@ -38,14 +52,12 @@ configure_bogus() {
     iptables -A Bogus -p tcp ! --syn -m state --state NEW -j DROP
     iptables -A Bogus -p tcp --tcp-flags ALL ALL -j DROP
     iptables -A Bogus -p tcp --tcp-flags ALL NONE -j DROP
-    if [[ ${PUBLIC} == "TRUE" ]] ; then
+    if public ; then
         iptables -A Bogus -s 169.254.0.0/16 -j DROP
         iptables -A Bogus -s 172.16.0.0/12 -j DROP
         iptables -A Bogus -s 192.0.2.0/24 -j DROP
         iptables -A Bogus -s 192.168.0.0/16 -j DROP
-        iptables -A Bogus -s 224.0.0.0/3 -j DROP
         iptables -A Bogus -s 10.0.0.0/8 -j DROP
-        iptables -A Bogus -s 0.0.0.0/8 -j DROP
         iptables -A Bogus -s 127.0.0.0/8 ! -i lo -j DROP
     fi
 }

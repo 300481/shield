@@ -5,8 +5,6 @@ rancheros-firewall:
   labels:
     io.rancher.os.scope: "system"
     io.rancher.os.after: "docker"
-  environment:
-  - PUBLIC=FALSE
   volumes_from:
     - all-volumes
   restart: always
