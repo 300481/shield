@@ -92,8 +92,8 @@ configure_LIMITS() {
     # limit new SSH connections
     iptables -A LIMITS ! -i lo -p tcp --dport 22 -m state --state NEW -m recent --update --seconds 600 --hitcount 10 -j LOGDROP
     iptables -A LIMITS ! -i lo -p tcp --dport 22 -m state --state NEW -m recent --set
-    iptables -A LIMITS ! -i lo -p tcp --dport 22 -m limit --limit 5/minute -j RETURN
-    iptables -A LIMITS ! -i lo -p tcp --dport 22 -j LOGDROP
+    iptables -A LIMITS ! -i lo -p tcp --dport 22 -m state --state NEW -m limit --limit 5/minute -j RETURN
+    iptables -A LIMITS ! -i lo -p tcp --dport 22 -m state --state NEW -j LOGDROP
 }
 
 keep_running() {
