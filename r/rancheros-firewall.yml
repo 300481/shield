@@ -1,10 +1,10 @@
 rancheros-firewall:
-  image: 300481/rancheros-firewall:0.1.1
+  image: 300481/rancheros-firewall:0.1.2
   command: "/bin/configure-firewall.sh"
   privileged: "true"
   labels:
     io.rancher.os.scope: "system"
-    io.rancher.os.after: "docker"
+    io.rancher.os.after: "network"
   volumes_from:
     - all-volumes
   restart: always
