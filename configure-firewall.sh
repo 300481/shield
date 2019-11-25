@@ -53,7 +53,7 @@ create_chains() {
 }
 
 configure_LOGDROP() {
-    iptables -A LOGDROP -m limit --limit 2/min -j LOG --log-prefix "IPTables Packet Dropped: " --log-level 7
+    iptables -A LOGDROP -m limit --limit 12/min -j LOG --log-prefix "IPTables Packet Dropped: " --log-level 7
     iptables -A LOGDROP -j DROP
 }
 
@@ -68,19 +68,19 @@ configure_BOGUS() {
     # drop fragments
     iptables -A BOGUS -f -j LOGDROP
     # drop private source IPs on public interface
-    if public ; then
-        iptables -A BOGUS -s 169.254.0.0/16 -j LOGDROP
-        iptables -A BOGUS -s 172.16.0.0/12 -j LOGDROP
-        iptables -A BOGUS -s 192.0.2.0/24 -j LOGDROP
-        iptables -A BOGUS -s 192.168.0.0/16 -j LOGDROP
-        iptables -A BOGUS -s 10.0.0.0/8 -j LOGDROP
-        iptables -A BOGUS -s 127.0.0.0/8 ! -i lo -j LOGDROP
-    fi
+#    if public ; then
+#        iptables -A BOGUS -s 169.254.0.0/16 -j LOGDROP
+#        iptables -A BOGUS -s 172.16.0.0/12 -j LOGDROP
+#        iptables -A BOGUS -s 192.0.2.0/24 -j LOGDROP
+#        iptables -A BOGUS -s 192.168.0.0/16 -j LOGDROP
+#        iptables -A BOGUS -s 10.0.0.0/8 -j LOGDROP
+#        iptables -A BOGUS -s 127.0.0.0/8 ! -i lo -j LOGDROP
+#    fi
 }
 
 configure_PORTSCAN() {
     # block port scanners
-    DESTINATION_PORTS="21,23,135,389,636,1433,3306,5432,8086,10000,25565"
+    DESTINATION_PORTS="21,22,23,135,389,636,1433,3306,5432,8086,10000,25565"
     iptables -A PORTSCAN  -m recent --name psc --update --seconds 300 -j LOGDROP
     iptables -A PORTSCAN ! -i lo -m tcp -p tcp -m multiport --dports ${DESTINATION_PORTS} -m recent --name psc --set -j LOGDROP
 }
@@ -90,10 +90,10 @@ configure_LIMITS() {
     iptables -A LIMITS -p icmp --icmp-type any -m limit --limit 2/second -j RETURN
     iptables -A LIMITS -p icmp --icmp-type any -j LOGDROP
     # limit new SSH connections
-    iptables -A LIMITS ! -i lo -p tcp --dport 22 -m state --state NEW -m recent --update --seconds 600 --hitcount 10 -j LOGDROP
-    iptables -A LIMITS ! -i lo -p tcp --dport 22 -m state --state NEW -m recent --set
-    iptables -A LIMITS ! -i lo -p tcp --dport 22 -m state --state NEW -m limit --limit 5/minute -j RETURN
-    iptables -A LIMITS ! -i lo -p tcp --dport 22 -m state --state NEW -j LOGDROP
+    iptables -A LIMITS ! -i lo -p tcp --dport 65000 -m state --state NEW -m recent --update --seconds 600 --hitcount 10 -j LOGDROP
+    iptables -A LIMITS ! -i lo -p tcp --dport 65000 -m state --state NEW -m recent --set
+    iptables -A LIMITS ! -i lo -p tcp --dport 65000 -m state --state NEW -m limit --limit 5/minute -j RETURN
+    iptables -A LIMITS ! -i lo -p tcp --dport 65000 -m state --state NEW -j LOGDROP
 }
 
 keep_running() {
