@@ -1,5 +1,5 @@
 rancheros-firewall:
-  image: 300481/rancheros-firewall:0.1.3
+  image: 300481/rancheros-firewall:0.1.4
   command: "/bin/configure-firewall.sh"
   privileged: "true"
   labels:
@@ -9,3 +9,5 @@ rancheros-firewall:
     - all-volumes
   restart: always
   net: host
+  environment:
+    - PORTSCAN

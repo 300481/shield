@@ -8,6 +8,10 @@ The purpose of this service is to have an as good as possible
 
 network protection with iptables-rules for the RancherOS server.
 
+## environment
+
+|Variable|Description|Default Value|
+|`PORTSCAN`|The comma separated list of ports, which will be trapped, when scanned. Then the source IP will be blocked.|`21,22,23,135,389,636,1433,3306,5432,8086,10000,25565`|
 
 ## contribution
 

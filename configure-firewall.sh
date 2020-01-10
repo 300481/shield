@@ -10,6 +10,8 @@
 # https://netfilter.org/documentation/HOWTO/de/packet-filtering-HOWTO-7.html
 # https://www.cyberciti.biz/tips/linux-iptables-10-how-to-block-common-attack.html
 
+: ${PORTSCAN:=21,22,23,135,389,636,1433,3306,5432,8086,10000,25565}
+
 trap cleanup 1 2 3 9 15
 cleanup() {
     echo -n "Remove chains..."
@@ -80,9 +82,8 @@ configure_BOGUS() {
 
 configure_PORTSCAN() {
     # block port scanners
-    DESTINATION_PORTS="21,22,23,135,389,636,1433,3306,5432,8086,10000,25565"
     iptables -A PORTSCAN  -m recent --name psc --update --seconds 300 -j LOGDROP
-    iptables -A PORTSCAN ! -i lo -m tcp -p tcp -m multiport --dports ${DESTINATION_PORTS} -m recent --name psc --set -j LOGDROP
+    iptables -A PORTSCAN ! -i lo -m tcp -p tcp -m multiport --dports ${PORTSCAN} -m recent --name psc --set -j LOGDROP
 }
 
 configure_LIMITS() {
