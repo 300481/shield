@@ -17,7 +17,6 @@ network protection with iptables-rules for the RancherOS server.
 
 Everyone who likes, is welcomed to contribute to this project.
 
-
 ## cloud-config snippet
 
 ```yaml
