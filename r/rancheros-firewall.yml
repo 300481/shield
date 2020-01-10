@@ -11,3 +11,4 @@ rancheros-firewall:
   net: host
   environment:
     - PORTSCAN
+    - SSH_PORT

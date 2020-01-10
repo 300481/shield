@@ -11,6 +11,7 @@
 # https://www.cyberciti.biz/tips/linux-iptables-10-how-to-block-common-attack.html
 
 : ${PORTSCAN:=21,22,23,135,389,636,1433,3306,5432,8086,10000,25565}
+: ${SSH_PORT:=65000}
 
 trap cleanup 1 2 3 9 15
 cleanup() {
@@ -91,10 +92,10 @@ configure_LIMITS() {
     iptables -A LIMITS -p icmp --icmp-type any -m limit --limit 2/second -j RETURN
     iptables -A LIMITS -p icmp --icmp-type any -j LOGDROP
     # limit new SSH connections
-    iptables -A LIMITS ! -i lo -p tcp --dport 65000 -m state --state NEW -m recent --update --seconds 600 --hitcount 10 -j LOGDROP
-    iptables -A LIMITS ! -i lo -p tcp --dport 65000 -m state --state NEW -m recent --set
-    iptables -A LIMITS ! -i lo -p tcp --dport 65000 -m state --state NEW -m limit --limit 5/minute -j RETURN
-    iptables -A LIMITS ! -i lo -p tcp --dport 65000 -m state --state NEW -j LOGDROP
+    iptables -A LIMITS ! -i lo -p tcp --dport ${SSH_PORT} -m state --state NEW -m recent --update --seconds 600 --hitcount 10 -j LOGDROP
+    iptables -A LIMITS ! -i lo -p tcp --dport ${SSH_PORT} -m state --state NEW -m recent --set
+    iptables -A LIMITS ! -i lo -p tcp --dport ${SSH_PORT} -m state --state NEW -m limit --limit 5/minute -j RETURN
+    iptables -A LIMITS ! -i lo -p tcp --dport ${SSH_PORT} -m state --state NEW -j LOGDROP
 }
 
 keep_running() {
