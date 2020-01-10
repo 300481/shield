@@ -23,6 +23,8 @@ Everyone who likes, is welcomed to contribute to this project.
 
 ```yaml
 rancher:
+  environment:
+    SSH_PORT: 65000
   repositories:
     rancheros-firewall:
       url: https://raw.githubusercontent.com/300481/rancheros-firewall/master
