@@ -97,10 +97,7 @@ configure_LIMITS() {
 }
 
 keep_running() {
-    while true ; do
-        sleep 1 &
-        wait $!
-    done
+    tail -f /dev/null
 }
 
 main() {
