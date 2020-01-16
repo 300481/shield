@@ -15,7 +15,15 @@ to protect it with best effort from network attacks.
 
 Everyone who likes, is welcomed to contribute to this project.
 
-## cloud-config snippet for RacherOS
+## start containr
+
+### with docker
+
+```bash
+docker run -d --rm --network="host" --privileged --name shield [ -e "SSH_PORT=65000" -e "PORTSCAN=21,22,23,135,389,636,1433,3306,5432,8086,10000,25565" ] 300481/shield:0.1.4
+```
+
+### cloud-config snippet for RacherOS
 
 ```yaml
 rancher:
