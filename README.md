@@ -1,14 +1,10 @@
-# rancheros-firewall
+# shield
 
-## purpose
+This Docker Container configures the iptables of the underlying host
 
-If you install a blank RancherOS VM facing directly the internet, it has doors wide opened.
+to protect it with best effort from network attacks.
 
-The purpose of this service is to have an as good as possible
-
-network protection with iptables-rules for the RancherOS server.
-
-## environment
+## configuration by environment
 
 |Variable|Description|Default Value|
 |--------|-----------|-------------|
@@ -19,15 +15,15 @@ network protection with iptables-rules for the RancherOS server.
 
 Everyone who likes, is welcomed to contribute to this project.
 
-## cloud-config snippet
+## cloud-config snippet for RacherOS
 
 ```yaml
 rancher:
   environment:
     SSH_PORT: 65000
   repositories:
-    rancheros-firewall:
-      url: https://raw.githubusercontent.com/300481/rancheros-firewall/master
+    shield:
+      url: https://raw.githubusercontent.com/300481/shield/master
   services_include:
-    rancheros-firewall: true
+    shield: true
 ```
