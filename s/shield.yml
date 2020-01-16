@@ -1,5 +1,5 @@
-rancheros-firewall:
-  image: 300481/rancheros-firewall:0.1.4
+shield:
+  image: 300481/shield:0.1.4
   command: "/bin/configure-firewall.sh"
   privileged: "true"
   labels:
