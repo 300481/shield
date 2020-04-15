@@ -15,7 +15,9 @@ to protect it with best effort from network attacks.
 
 Everyone who likes, is welcomed to contribute to this project.
 
-## start containr
+Find additional information on [Medium](https://medium.com/@dennis.riemenschneider/configure-the-firewall-of-a-docker-server-d048b7e02871).
+
+## start container
 
 ### with docker
 
