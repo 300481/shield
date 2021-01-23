@@ -15,7 +15,7 @@ to protect it with best effort from network attacks.
 
 Everyone who likes, is welcomed to contribute to this project.
 
-Find additional information on [Medium](https://medium.com/@dennis.riemenschneider/make-your-server-invisible-on-attacks-by-just-using-a-simple-docker-container-80d19f13c8f7).
+Find additional information on [Medium](https://dennis-riemenschneider.medium.com/make-your-server-invisible-on-attacks-by-just-using-a-simple-docker-container-80d19f13c8f7).
 
 ## start container
 
