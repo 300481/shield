@@ -1,4 +1,4 @@
-FROM alpine:3.11.2
+FROM alpine:3.12.4
 
 RUN apk --no-cache add \
     tini \
