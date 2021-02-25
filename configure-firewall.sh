@@ -94,9 +94,9 @@ configure_LIMITS() {
     iptables -A LIMITS -i ${INTERFACE} -p icmp --icmp-type any -j LOGDROP
     # limit new SSH connections
     iptables -A LIMITS -i ${INTERFACE} -p tcp --dport ${SSH_PORT} -m state --state NEW -m recent --update --seconds 600 --hitcount 10 -j LOGDROP
-    iptables -A LIMITS -i ${INTERFACE} --dport ${SSH_PORT} -m state --state NEW -m recent --set
-    iptables -A LIMITS -i ${INTERFACE} --dport ${SSH_PORT} -m state --state NEW -m limit --limit 5/minute -j RETURN
-    iptables -A LIMITS -i ${INTERFACE} --dport ${SSH_PORT} -m state --state NEW -j LOGDROP
+    iptables -A LIMITS -i ${INTERFACE} -p tcp --dport ${SSH_PORT} -m state --state NEW -m recent --set
+    iptables -A LIMITS -i ${INTERFACE} -p tcp --dport ${SSH_PORT} -m state --state NEW -m limit --limit 5/minute -j RETURN
+    iptables -A LIMITS -i ${INTERFACE} -p tcp --dport ${SSH_PORT} -m state --state NEW -j LOGDROP
 }
 
 keep_running() {
