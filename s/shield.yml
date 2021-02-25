@@ -1,5 +1,5 @@
 shield:
-  image: 300481/shield:0.1.4
+  image: 300481/shield:0.1.5
   command: "/bin/configure-firewall.sh"
   privileged: "true"
   labels:
@@ -12,3 +12,4 @@ shield:
   environment:
     - PORTSCAN
     - SSH_PORT
+    - INTERFACE
