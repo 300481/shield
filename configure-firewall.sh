@@ -12,6 +12,7 @@
 
 : ${PORTSCAN:=21,22,23,135,389,636,1433,3306,5432,8086,10000,25565}
 : ${SSH_PORT:=65000}
+: ${INTERFACE:=eth0}
 
 trap cleanup 1 2 3 9 15
 cleanup() {
@@ -56,18 +57,18 @@ create_chains() {
 }
 
 configure_LOGDROP() {
-    iptables -A LOGDROP -m limit --limit 12/min -j LOG --log-prefix "IPTables Packet Dropped: " --log-level 7
-    iptables -A LOGDROP -j DROP
+    iptables -A LOGDROP -i ${INTERFACE} -m limit --limit 12/min -j LOG --log-prefix "IPTables Packet Dropped: " --log-level 7
+    iptables -A LOGDROP -i ${INTERFACE} -j DROP
 }
 
 configure_BOGUS() {
     # drop bogus packets
-    iptables -A BOGUS -p tcp -m tcp --tcp-flags SYN,FIN SYN,FIN -j LOGDROP
-    iptables -A BOGUS -p tcp -m tcp --tcp-flags SYN,RST SYN,RST -j LOGDROP
-    iptables -A BOGUS -p tcp ! --syn -m state --state NEW -j LOGDROP
+    iptables -A BOGUS -i ${INTERFACE} -p tcp -m tcp --tcp-flags SYN,FIN SYN,FIN -j LOGDROP
+    iptables -A BOGUS -i ${INTERFACE} -p tcp -m tcp --tcp-flags SYN,RST SYN,RST -j LOGDROP
+    iptables -A BOGUS -i ${INTERFACE} -p tcp ! --syn -m state --state NEW -j LOGDROP
     # drop XMAS
-    iptables -A BOGUS -p tcp --tcp-flags ALL ALL -j LOGDROP
-    iptables -A BOGUS -p tcp --tcp-flags ALL NONE -j LOGDROP
+    iptables -A BOGUS -i ${INTERFACE} -p tcp --tcp-flags ALL ALL -j LOGDROP
+    iptables -A BOGUS -i ${INTERFACE} -p tcp --tcp-flags ALL NONE -j LOGDROP
     # drop fragments
     iptables -A BOGUS -f -j LOGDROP
     # drop private source IPs on public interface
@@ -83,19 +84,19 @@ configure_BOGUS() {
 
 configure_PORTSCAN() {
     # block port scanners
-    iptables -A PORTSCAN  -m recent --name psc --update --seconds 300 -j LOGDROP
-    iptables -A PORTSCAN ! -i lo -m tcp -p tcp -m multiport --dports ${PORTSCAN} -m recent --name psc --set -j LOGDROP
+    iptables -A PORTSCAN -i ${INTERFACE} -m recent --name psc --update --seconds 300 -j LOGDROP
+    iptables -A PORTSCAN -i ${INTERFACE} -m tcp -p tcp -m multiport --dports ${PORTSCAN} -m recent --name psc --set -j LOGDROP
 }
 
 configure_LIMITS() {
     # limit ping packets
-    iptables -A LIMITS -p icmp --icmp-type any -m limit --limit 2/second -j RETURN
-    iptables -A LIMITS -p icmp --icmp-type any -j LOGDROP
+    iptables -A LIMITS -i ${INTERFACE} -p icmp --icmp-type any -m limit --limit 2/second -j RETURN
+    iptables -A LIMITS -i ${INTERFACE} -p icmp --icmp-type any -j LOGDROP
     # limit new SSH connections
-    iptables -A LIMITS ! -i lo -p tcp --dport ${SSH_PORT} -m state --state NEW -m recent --update --seconds 600 --hitcount 10 -j LOGDROP
-    iptables -A LIMITS ! -i lo -p tcp --dport ${SSH_PORT} -m state --state NEW -m recent --set
-    iptables -A LIMITS ! -i lo -p tcp --dport ${SSH_PORT} -m state --state NEW -m limit --limit 5/minute -j RETURN
-    iptables -A LIMITS ! -i lo -p tcp --dport ${SSH_PORT} -m state --state NEW -j LOGDROP
+    iptables -A LIMITS -i ${INTERFACE} -p tcp --dport ${SSH_PORT} -m state --state NEW -m recent --update --seconds 600 --hitcount 10 -j LOGDROP
+    iptables -A LIMITS -i ${INTERFACE} --dport ${SSH_PORT} -m state --state NEW -m recent --set
+    iptables -A LIMITS -i ${INTERFACE} --dport ${SSH_PORT} -m state --state NEW -m limit --limit 5/minute -j RETURN
+    iptables -A LIMITS -i ${INTERFACE} --dport ${SSH_PORT} -m state --state NEW -j LOGDROP
 }
 
 keep_running() {
