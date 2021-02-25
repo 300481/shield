@@ -10,6 +10,7 @@ to protect it with best effort from network attacks.
 |--------|-----------|-------------|
 |`PORTSCAN`|The comma separated list of ports, which will be trapped, when scanned. Then the source IP will be blocked.|`21,22,23,135,389,636,1433,3306,5432,8086,10000,25565`|
 |`SSH_PORT`|The SSH port.|`65000`|
+|`INTERFACE`|The Network Interface to protect.|`eth0`|
 
 ## contribution
 
@@ -22,7 +23,7 @@ Find additional information on [Medium](https://dennis-riemenschneider.medium.co
 ### with docker
 
 ```bash
-docker run -d --rm --network="host" --privileged --name shield [ -e "SSH_PORT=65000" -e "PORTSCAN=21,22,23,135,389,636,1433,3306,5432,8086,10000,25565" ] 300481/shield:0.1.4
+docker run -d --rm --network="host" --privileged --name shield [ -e "SSH_PORT=65000" -e "PORTSCAN=21,22,23,135,389,636,1433,3306,5432,8086,10000,25565" -e "INTERFACE=eth0" ] 300481/shield:0.1.5
 ```
 
 ### cloud-config snippet for RacherOS
@@ -31,6 +32,7 @@ docker run -d --rm --network="host" --privileged --name shield [ -e "SSH_PORT=65
 rancher:
   environment:
     SSH_PORT: 65000
+    INTERFACE: eth0
   repositories:
     shield:
       url: https://raw.githubusercontent.com/300481/shield/master
