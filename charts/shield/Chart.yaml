@@ -4,3 +4,17 @@ description: Helm Chart for shield
 type: application
 version: 0.1.5
 appVersion: 0.1.5
+home: https://github.com/300481/shield
+description: shield makes the underlying host "magically" disappear during network attacks.
+icon: https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Nginx_logo.svg/500px-Nginx_logo.svg.png
+keywords:
+  - iptables
+  - firewall
+  - container
+  - security
+sources:
+  - https://github.com/300481/shield
+maintainers:
+  - name: "300481"
+engine: gotpl
+kubeVersion: ">=1.16.0-0"
