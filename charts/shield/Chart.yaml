@@ -1,0 +1,6 @@
+apiVersion: v2
+name: shield
+description: Helm Chart for shield
+type: application
+version: 0.1.5
+appVersion: 0.1.5
