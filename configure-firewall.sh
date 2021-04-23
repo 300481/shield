@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # https://github.com/vitobotta/docker-firewall
 # https://www.lammertbies.nl/comm/info/iptables.html
