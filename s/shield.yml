@@ -1,5 +1,5 @@
 shield:
-  image: 300481/shield:0.1.5
+  image: 300481/shield:0.2.0
   command: "/bin/configure-firewall.sh"
   privileged: "true"
   labels:

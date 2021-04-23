@@ -2,8 +2,8 @@ apiVersion: v2
 name: shield
 description: Helm Chart for shield
 type: application
-version: 0.1.5
-appVersion: 0.1.5
+version: 0.2.0
+appVersion: 0.2.0
 home: https://github.com/300481/shield
 description: shield makes the underlying host "magically" disappear during network attacks.
 keywords:
