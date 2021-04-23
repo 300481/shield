@@ -85,7 +85,24 @@ configure_BOGUS() {
 configure_PORTSCAN() {
     # block port scanners
     iptables -A PORTSCAN -i ${INTERFACE} -m recent --name psc --update --seconds 300 -j LOGDROP
-    iptables -A PORTSCAN -i ${INTERFACE} -m tcp -p tcp -m multiport --dports ${PORTSCAN} -m recent --name psc --set -j LOGDROP
+
+    # copy ports to ALL_PORTS
+    ALL_PORTS=${PORTSCAN}
+    
+    # get number of ports given
+    IFS=',' read -r -a PORTCOUNT <<< $ALL_PORTS
+    PORTCOUNT=${#PORTCOUNT[@]}
+
+    # get number of port slices (iptables support only 15 for multiport)
+    PORTCOUNT=$((PORTCOUNT + 14))
+    PORTSLICES=$((PORTCOUNT / 15))
+
+    # iterate over the port slices and add iptable rules
+    for i in $(seq 1 ${PORTSLICES}) ; do
+        APPLY_PORTS=$(cut -d, -f1-15 <<< $ALL_PORTS)
+        iptables -A PORTSCAN -i ${INTERFACE} -m tcp -p tcp -m multiport --dports ${APPLY_PORTS} -m recent --name psc --set -j LOGDROP
+        ALL_PORTS=${ALL_PORTS#$APPLY_PORTS,}
+    done
 }
 
 configure_LIMITS() {
