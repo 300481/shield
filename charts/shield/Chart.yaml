@@ -17,3 +17,10 @@ maintainers:
   - name: "300481"
 engine: gotpl
 kubeVersion: ">=1.16.0-0"
+annotations:
+  artifacthub.io/images: |
+    - name: shield
+      image: 300481/shield:0.2.1
+  artifacthub.io/maintainers: |
+    - name: 300481
+      email: 300481@300481.de
