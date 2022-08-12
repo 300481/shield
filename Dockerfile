@@ -1,9 +1,10 @@
-FROM alpine:3.13.5
+FROM alpine:3.16.2
 
 RUN apk --no-cache add \
     bash \
     tini \
-    iptables
+    iptables \
+    ip6tables
 
 COPY configure-firewall.sh /bin
 

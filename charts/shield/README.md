@@ -4,7 +4,7 @@
 
 ## Prerequisites
 
-- Kubernetes v1.16+
+- Kubernetes v1.23+
 
 ## Get Repo Info
 

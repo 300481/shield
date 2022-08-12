@@ -7,7 +7,7 @@ This container makes the underlying host "magically" disappear during network at
 ### Docker
 
 ```bash
-docker run -d --rm --network="host" --privileged --name shield [ -e "SSH_PORT=65000" -e "PORTSCAN=21,22,23,135,389,636,1433,3306,5432,8086,10000,25565" -e "INTERFACE=eth0" ] 300481/shield:0.2.1
+docker run -d --rm --network="host" --privileged --name shield [ -e "SSH_PORT=65000" -e "PORTSCAN=21,22,23,135,389,636,1433,3306,5432,8086,10000,25565" -e "INTERFACE=eth0" ] 300481/shield:0.3.0
 ```
 
 ### Kubernetes Helm Chart

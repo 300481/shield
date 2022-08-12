@@ -2,12 +2,13 @@ apiVersion: v2
 name: shield
 description: Helm Chart for shield
 type: application
-version: 0.2.1
-appVersion: 0.2.1
+version: 0.3.0
+appVersion: 0.3.0
 home: https://github.com/300481/shield
 description: shield makes the underlying host "magically" disappear during network attacks.
 keywords:
   - iptables
+  - ip6tables
   - firewall
   - container
   - security
@@ -16,11 +17,11 @@ sources:
 maintainers:
   - name: "300481"
 engine: gotpl
-kubeVersion: ">=1.16.0-0"
+kubeVersion: ">=1.23.0-0"
 annotations:
   artifacthub.io/images: |
     - name: shield
-      image: 300481/shield:0.2.1
+      image: 300481/shield:0.3.0
   artifacthub.io/maintainers: |
     - name: 300481
       email: 300481@300481.de
