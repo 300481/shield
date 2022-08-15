@@ -62,8 +62,10 @@ create_chains() {
 }
 
 configure_LOGDROP() {
-    ipt -A LOGDROP -i ${INTERFACE} -m limit --limit 12/min -j LOG --log-prefix "IPTables Packet Dropped: " --log-level 7
-    ipt -A LOGDROP -i ${INTERFACE} -j DROP
+    iptables -A LOGDROP -i ${INTERFACE} -m limit --limit 12/min -j LOG --log-prefix "IPTables Packet Dropped: " --log-level 7
+    iptables -A LOGDROP -i ${INTERFACE} -j DROP
+    ip6tables -A LOGDROP -i ${INTERFACE} -m limit --limit 12/min -j LOG --log-prefix "IPTables Packet Dropped: " --log-level 7
+    ip6tables -A LOGDROP -i ${INTERFACE} -j DROP
 }
 
 configure_BOGUS() {
@@ -75,7 +77,8 @@ configure_BOGUS() {
     ipt -A BOGUS -i ${INTERFACE} -p tcp --tcp-flags ALL ALL -j LOGDROP
     ipt -A BOGUS -i ${INTERFACE} -p tcp --tcp-flags ALL NONE -j LOGDROP
     # drop fragments
-    ipt -A BOGUS -f -j LOGDROP
+    iptables -A BOGUS -f -j LOGDROP
+    ip6tables -A BOGUS -m frag -j LOGDROP
     # drop private source IPs on public interface
 #    if public ; then
 #        ipt -A BOGUS -s 169.254.0.0/16 -j LOGDROP
@@ -112,8 +115,10 @@ configure_PORTSCAN() {
 
 configure_LIMITS() {
     # limit ping packets
-    ipt -A LIMITS -i ${INTERFACE} -p icmp --icmp-type any -m limit --limit 2/second -j RETURN
-    ipt -A LIMITS -i ${INTERFACE} -p icmp --icmp-type any -j LOGDROP
+    iptables -A LIMITS -i ${INTERFACE} -p icmp --icmp-type any -m limit --limit 2/second -j RETURN
+    iptables -A LIMITS -i ${INTERFACE} -p icmp --icmp-type any -j LOGDROP
+    ip6tables -A LIMITS -i ${INTERFACE} -p icmp -m limit --limit 2/second -j RETURN
+    ip6tables -A LIMITS -i ${INTERFACE} -p icmp -j LOGDROP
     # limit new SSH connections
     ipt -A LIMITS -i ${INTERFACE} -p tcp --dport ${SSH_PORT} -m state --state NEW -m recent --update --seconds 600 --hitcount 10 -j LOGDROP
     ipt -A LIMITS -i ${INTERFACE} -p tcp --dport ${SSH_PORT} -m state --state NEW -m recent --set
